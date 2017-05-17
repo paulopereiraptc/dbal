@@ -464,13 +464,14 @@ class QueryBuilder
      */
     public function select($select = null)
     {
+        $args = func_get_args();
         $this->type = self::SELECT;
 
         if (empty($select)) {
             return $this;
         }
 
-        $selects = is_array($select) ? $select : func_get_args();
+        $selects = is_array($select) ? $select : $args;
 
         return $this->add('select', $selects, false);
     }
@@ -492,13 +493,14 @@ class QueryBuilder
      */
     public function addSelect($select = null)
     {
+        $args = func_get_args();
         $this->type = self::SELECT;
 
         if (empty($select)) {
             return $this;
         }
 
-        $selects = is_array($select) ? $select : func_get_args();
+        $selects = is_array($select) ? $select : $args;
 
         return $this->add('select', $selects, true);
     }
@@ -775,8 +777,9 @@ class QueryBuilder
      */
     public function where($predicates)
     {
-        if ( ! (func_num_args() == 1 && $predicates instanceof CompositeExpression)) {
-            $predicates = new CompositeExpression(CompositeExpression::TYPE_AND, func_get_args());
+        $args = func_get_args();
+        if ( ! (count($args) == 1 && $predicates instanceof CompositeExpression)) {
+            $predicates = new CompositeExpression(CompositeExpression::TYPE_AND, $args);
         }
 
         return $this->add('where', $predicates);
@@ -865,11 +868,12 @@ class QueryBuilder
      */
     public function groupBy($groupBy)
     {
+        $args = func_get_args();
         if (empty($groupBy)) {
             return $this;
         }
 
-        $groupBy = is_array($groupBy) ? $groupBy : func_get_args();
+        $groupBy = is_array($groupBy) ? $groupBy : $args;
 
         return $this->add('groupBy', $groupBy, false);
     }
@@ -961,8 +965,9 @@ class QueryBuilder
      */
     public function having($having)
     {
-        if ( ! (func_num_args() == 1 && $having instanceof CompositeExpression)) {
-            $having = new CompositeExpression(CompositeExpression::TYPE_AND, func_get_args());
+        $args = func_get_args();
+        if ( ! (count($args) == 1 && $having instanceof CompositeExpression)) {
+            $having = new CompositeExpression(CompositeExpression::TYPE_AND, $args);
         }
 
         return $this->add('having', $having);
